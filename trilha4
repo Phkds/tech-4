@@ -1,0 +1,137 @@
+// exercicio 1
+interface Produto {
+    id: number;
+    nome: string;
+    preco: number;
+}
+
+class ItemLoja  implements Produto {
+    id: number;
+    nome: string;
+    preco: number;
+
+    constructor(id: number, nome: string, preco: number) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+    }
+}
+
+const item = new ItemLoja(1, "Camisa", 59.90);
+console.log(item);
+
+
+
+// exercicio 2
+interface Documento {
+    titulo: string;
+    conteudo: string;
+}
+
+class Texto implements Documento {
+    titulo: string;
+    conteudo: string;
+
+    constructor(titulo: string, conteudo: string) {
+        this.titulo = titulo;
+        this.conteudo = conteudo;
+    }
+
+    exibir(): string {
+        return `Título: ${this.titulo}, Conteúdo: ${this.conteudo}`;
+    }
+}
+
+const txt = new Texto("Aviso", "A loja fechará às 18h.");
+console.log(txt.exibir());
+
+// exercicio 3
+interface ProdutoLoja {
+    codigo: number;
+    nome: string;
+}
+
+class Loja {
+    private produtos: ProdutoLoja[] = [];
+
+    adicionarProduto(produto: ProdutoLoja) {
+        this.produtos.push(produto);
+    }
+
+    buscarProdutoPorCodigo(codigo: number): ProdutoLoja | undefined {
+        return this.produtos.find(p => p.codigo === codigo);
+    }
+}
+
+const loja = new Loja();
+loja.adicionarProduto({ codigo: 101, nome: "Tênis" });
+loja.adicionarProduto({ codigo: 102, nome: "Boné" });
+
+console.log(loja.buscarProdutoPorCodigo(102));
+console.log(loja.buscarProdutoPorCodigo(999)); // undefined
+
+
+
+// exercicio 4
+interface Livro {
+    titulo: string;
+    autor: string;
+    disponivel: boolean;
+}
+
+class Biblioteca {
+    private livros: Livro[] = [];
+
+    adicionarLivro(livro: Livro) {
+        this.livros.push(livro);
+    }
+
+    buscarLivrosDisponiveis(): Livro[] {
+        return this.livros.filter(livro => livro.disponivel === true);
+    }
+}
+
+const biblioteca = new Biblioteca();
+biblioteca.adicionarLivro({ titulo: "1984", autor: "George Orwell", disponivel: true });
+biblioteca.adicionarLivro({ titulo: "It", autor: "Stephen King", disponivel: false });
+
+console.log(biblioteca.buscarLivrosDisponiveis());
+
+// exercicio 5
+interface LivroBiblioteca {
+    titulo: string;
+    autor: string;
+    genero: string;
+    disponivel: boolean;
+}
+
+class BibliotecaGestao {
+    private livros: LivroBiblioteca[] = [];
+
+    adicionarLivro(livro: LivroBiblioteca) {
+        this.livros.push(livro);
+    }
+
+    filtrarPorGenero(genero: string): LivroBiblioteca[] {
+        return this.livros.filter(l => l.genero.toLowerCase() === genero.toLowerCase());
+    }
+
+    buscarPorAutor(autor: string): LivroBiblioteca[] {
+        return this.livros.filter(l => l.autor.toLowerCase() === autor.toLowerCase());
+    }
+
+    obterLivrosDisponiveisOrdenados(): LivroBiblioteca[] {
+        return this.livros
+            .filter(l => l.disponivel === true)
+            .sort((a, b) => a.titulo.localeCompare(b.titulo));
+    }
+}
+
+const gestao = new BibliotecaGestao();
+gestao.adicionarLivro({ titulo: "O Hobbit", autor: "Tolkien", genero: "Fantasia", disponivel: true });
+gestao.adicionarLivro({ titulo: "Duna", autor: "Frank Herbert", genero: "Ficção", disponivel: true });
+gestao.adicionarLivro({ titulo: "It", autor: "Stephen King", genero: "Terror", disponivel: false });
+
+console.log(gestao.filtrarPorGenero("Fantasia"));
+console.log(gestao.buscarPorAutor("Tolkien"));
+console.log(gestao.obterLivrosDisponiveisOrdenados());
