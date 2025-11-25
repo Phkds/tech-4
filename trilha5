@@ -1,0 +1,144 @@
+//exercicio 1
+ abstract class TaskManager {
+  abstract addTask(task: string): void;
+  abstract listTasks(): string[];
+}
+
+class Project extends TaskManager {
+  private tasks: { tipo: string; nome: string }[] = [];
+
+  addTask(task: string): void {
+    if (!this.tasks.find(t => t.nome === task)) {
+      this.tasks.push({ tipo: "projeto", nome: task });
+    }
+  }
+
+  listTasks(): string[] {
+    return this.tasks.map(t => `${t.tipo}: ${t.nome}`);
+  }
+}
+
+class DailyTasks extends TaskManager {
+  private tasks: { tipo: string; nome: string }[] = [];
+
+  addTask(task: string): void {
+    if (!this.tasks.find(t => t.nome === task)) {
+      this.tasks.push({ tipo: "diária", nome: task });
+    }
+  }
+
+  listTasks(): string[] {
+    return this.tasks.map(t => `${t.tipo}: ${t.nome}`);
+  }
+}
+
+
+
+// exercicio 2
+abstract class Inventory {
+  abstract addItem(item: string, quantity: number): void;
+  abstract removeItem(item: string): void;
+  abstract getInventory(): Record<string, number>;
+}
+
+class WarehouseInventory extends Inventory {
+  private items: Record<string, number> = {};
+
+  addItem(item: string, quantity: number): void {
+    this.items[item] = (this.items[item] || 0) + quantity;
+  }
+
+  removeItem(item: string): void {
+    delete this.items[item];
+  }
+
+  getInventory(): Record<string, number> {
+    return this.items;
+  }
+}
+
+class StoreInventory extends Inventory {
+  private items: Record<string, number> = {};
+  private maxPerItem = 10;
+
+  addItem(item: string, quantity: number): void {
+    const atual = this.items[item] || 0;
+    const novoValor = Math.min(atual + quantity, this.maxPerItem);
+    this.items[item] = novoValor;
+  }
+
+  removeItem(item: string): void {
+    delete this.items[item];
+  }
+
+  getInventory(): Record<string, number> {
+    return this.items;
+  }
+}
+
+
+// exercicio 3
+abstract class FavoriteManager {
+  abstract addFavorite(item: string): void;
+  abstract getFavorites(): string[];
+}
+
+class MoviesFavoriteManager extends FavoriteManager {
+  private movies: string[] = [];
+
+  addFavorite(item: string): void {
+    if (!this.movies.includes(item)) {
+      this.movies.push(item);
+      this.movies.sort();
+    }
+  }
+
+  getFavorites(): string[] {
+    return this.movies;
+  }
+}
+
+class BooksFavoriteManager extends FavoriteManager {
+  private books: string[] = [];
+
+  addFavorite(item: string): void {
+    this.books.unshift(item);
+  }
+
+  getFavorites(): string[] {
+    return this.books;
+  }
+}
+
+
+// exercicio 4
+abstract class VoteSystem {
+  abstract voteFor(candidate: string): void;
+  abstract getResults(): object;
+}
+
+class Election extends VoteSystem {
+  private votes: Record<string, number> = {};
+
+  voteFor(candidate: string): void {
+    this.votes[candidate] = (this.votes[candidate] || 0) + 1;
+  }
+
+  getResults(): object {
+    return this.votes;
+  }
+}
+
+class Poll extends VoteSystem {
+  private votes: Record<string, number> = {};
+
+  voteFor(candidate: string): void {
+    this.votes[candidate] = (this.votes[candidate] || 0) + 1;
+  }
+
+  getResults(): object {
+    return Object.entries(this.votes)
+      .sort((a, b) => b[1] - a[1])
+      .map(([candidato, votos]) => ({ candidato, votos }));
+  }
+}
